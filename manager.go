@@ -24,22 +24,19 @@ func NewManager() *manager {
 }
 
 func (m *manager) loop() {
-	for {
-		select {
-		case r := <-m.requests:
-			reps := make(chan Response, 1)
-			r.rep <- reps
-			wg := sync.WaitGroup{}
-			wg.Add(1)
-			m.handler.Handle(r.req, func(rs Response) {
-				reps <- rs
-				wg.Done()
-			})
-			go func() {
-				wg.Wait()
-				close(reps)
-			}()
-		}
+	for r := range m.requests {
+		reps := make(chan Response, 1)
+		r.rep <- reps
+		wg := sync.WaitGroup{}
+		wg.Add(1)
+		m.handler.Handle(r.req, func(rs Response) {
+			reps <- rs
+			wg.Done()
+		})
+		go func() {
+			wg.Wait()
+			close(reps)
+		}()
 	}
 }
 

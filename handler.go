@@ -27,14 +27,8 @@ func NewHandler() *handler {
 }
 
 func (h *handler) loop() {
-	for {
-		select {
-		case r, ok := <-h.requests:
-			if !ok {
-				return
-			}
-			r.done(run(r.req))
-		}
+	for r := range h.requests {
+		r.done(run(r.req))
 	}
 }
 
