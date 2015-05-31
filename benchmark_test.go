@@ -11,9 +11,8 @@ func testOne(m *manager) error {
 	for i := 0; i < 10; i++ {
 		x = x + x
 	}
-	r := Request{
-		Id: x,
-	}
+	_ = x
+	r := Request{}
 	rep := m.Handle(r)
 	if want, have := 5<<10, len(rep.A); have != want {
 		return fmt.Errorf("want %d, have %d", want, have)
