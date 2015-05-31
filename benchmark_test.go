@@ -16,7 +16,7 @@ func testOne(m *manager) error {
 	}
 	rep := m.Handle(r)
 	if want, have := 5<<10, len(rep.A); have != want {
-		return fmt.Errorf("have %d, want %d", want, have)
+		return fmt.Errorf("want %d, have %d", want, have)
 	}
 	return nil
 }
