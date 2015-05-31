@@ -1,9 +1,5 @@
 package server
 
-import (
-	"sync"
-)
-
 type request struct {
 	req Request
 	rep chan chan Response
@@ -27,16 +23,9 @@ func (m *manager) loop() {
 	for r := range m.requests {
 		reps := make(chan Response, 1)
 		r.rep <- reps
-		wg := sync.WaitGroup{}
-		wg.Add(1)
 		m.handler.Handle(r.req, func(rs Response) {
 			reps <- rs
-			wg.Done()
 		})
-		go func() {
-			wg.Wait()
-			close(reps)
-		}()
 	}
 }
 
