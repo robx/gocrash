@@ -23,9 +23,7 @@ func (m *manager) loop() {
 	for r := range m.requests {
 		reps := make(chan Response, 1)
 		r.rep <- reps
-		m.handler.Handle(r.req, func(rs Response) {
-			reps <- rs
-		})
+		m.handler.Handle(r.req, reps)
 	}
 }
 
