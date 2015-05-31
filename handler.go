@@ -1,9 +1,5 @@
 package server
 
-import (
-	"sync"
-)
-
 type hrequest struct {
 	req  Request
 	done func(Response)
@@ -11,18 +7,13 @@ type hrequest struct {
 
 type handler struct {
 	requests chan hrequest
-	wg       sync.WaitGroup
 }
 
 func NewHandler() *handler {
 	h := handler{
 		requests: make(chan hrequest),
 	}
-	h.wg.Add(1)
-	go func() {
-		h.loop()
-		h.wg.Done()
-	}()
+	go h.loop()
 	return &h
 }
 
