@@ -1,4 +1,4 @@
 .PHONY: crash
 
 crash:
-	go test -bench=. -cpu=2 2>&1 |head
+	go test -bench=. -cpu=4 2>&1 |head
