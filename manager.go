@@ -11,30 +11,28 @@ type Response struct {
 	H string
 }
 
-type manager chan chan chan Response
+type manager chan chan Response
 
 func NewManager() manager {
+	h := NewHandler()
 	m := make(manager)
-	go m.loop(NewHandler())
+	go m.loop(h)
 	return m
 }
 
 func (m manager) loop(h handler) {
 	for r := range m {
-		reps := make(chan Response)
-		r <- reps
-		f := func(rs Response) {
-			reps <- rs
-		}
-		h.Handle(f)
+		r2 := r
+		h.Handle(func(rs Response) {
+			r2 <- rs
+		})
 	}
 }
 
 func (m manager) Handle() Response {
-	rep := make(chan chan Response)
+	rep := make(chan Response)
 	m <- rep
-	reps := <-rep
-	return <-reps
+	return <-rep
 }
 
 type handler chan func(Response)
