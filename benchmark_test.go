@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func testOne(m *manager) error {
+func testOne(m manager) error {
 	x := "hello"
 	for i := 0; i < 10; i++ {
 		x = x + x
