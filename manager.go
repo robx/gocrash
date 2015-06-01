@@ -23,9 +23,9 @@ func NewManager() manager {
 func (m manager) loop(h handler) {
 	for r := range m {
 		r2 := r
-		h.Handle(func(rs Response) {
+		h <- func(rs Response) {
 			r2 <- rs
-		})
+		}
 	}
 }
 
@@ -51,8 +51,4 @@ func (h handler) loop() {
 		}
 		r(Response{A: x})
 	}
-}
-
-func (h handler) Handle(done func(Response)) {
-	h <- done
 }
