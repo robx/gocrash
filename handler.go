@@ -1,7 +1,6 @@
 package server
 
 type hrequest struct {
-	req  Request
 	done func(Response)
 }
 
@@ -19,16 +18,16 @@ func NewHandler() *handler {
 
 func (h *handler) loop() {
 	for r := range h.requests {
-		r.done(run(r.req))
+		r.done(run())
 	}
 }
 
-func (h *handler) Handle(req Request, done func(Response)) {
-	r := hrequest{req, done}
+func (h *handler) Handle(done func(Response)) {
+	r := hrequest{done}
 	h.requests <- r
 }
 
-func run(req Request) Response {
+func run() Response {
 	x := "world"
 	for i := 0; i < 10; i++ {
 		x = x + x

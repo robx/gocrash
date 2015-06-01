@@ -1,9 +1,5 @@
 package server
 
-type Request struct {
-	Id string
-}
-
 type Response struct {
 	A string
 	B string
